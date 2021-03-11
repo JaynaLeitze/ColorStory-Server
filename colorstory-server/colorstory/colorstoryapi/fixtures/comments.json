@@ -1,0 +1,22 @@
+[
+  {
+    "model": "colorstoryapi.comment",
+    "pk": 1,
+    "fields": {
+      "story_id": 1,
+      "author_id": 1,
+      "content": "comment 1",
+      "created_on": "2020-08-29T13:24:27.172Z"
+    }
+  },
+  {
+    "model": "colorstoryapi.comment",
+    "pk": 2,
+    "fields": {
+      "story_id": 2,
+      "author_id": 1,
+      "content": "comment 2",
+      "created_on": "2020-09-29T13:24:27.172Z"
+    }
+  }
+]
