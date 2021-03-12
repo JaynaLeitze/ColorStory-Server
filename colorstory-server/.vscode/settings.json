@@ -1,0 +1,10 @@
+{
+    "python.linting.pylintEnabled": true,
+    "sqltools.connections": [
+        {
+            "driver": "SQLite",
+            "name": "colorstory",
+            "database": "db.sqlite3"
+        }
+    ]
+}

@@ -152,3 +152,4 @@ dmypy.json
 migrations
 docs
 Pipfile.lock
+seed.sh
