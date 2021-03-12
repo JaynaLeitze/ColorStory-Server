@@ -4,7 +4,7 @@
         {
             "previewLimit": 50,
             "driver": "SQLite",
-            "name": "colorstory",
+            "name": "CS",
             "database": "db.sqlite3"
         }
     ]
