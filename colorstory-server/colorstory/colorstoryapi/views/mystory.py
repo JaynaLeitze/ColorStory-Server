@@ -66,6 +66,16 @@ class MyStories(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def list(self, request):
+        """Handle GET requests to post resource
+        Returns:
+            Response -- JSON serialized list of posts
+        """
+        stories = Story.objects.all(user=request.auth.user).order_by('-created_on')
+
+        serializer = StorySerializer(
+            stories, many=True, context={'request': request})
+        return Response(serializer.data)
 
 class StorySerializer(serializers.ModelSerializer):
     """JSON serializer for stories

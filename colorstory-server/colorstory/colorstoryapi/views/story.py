@@ -16,7 +16,7 @@ class Stories(ViewSet):
         Returns:
             Response -- JSON serialized list of posts
         """   
-        stories = Story.objects.filter(private=False)
+        stories = Story.objects.filter(private=False).order_by('-created_on')
 
         serializer = StorySerializer(
             stories, many=True, context={'request': request})
