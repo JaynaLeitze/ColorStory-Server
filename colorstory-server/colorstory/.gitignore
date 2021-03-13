@@ -151,4 +151,4 @@ migrations
 docs
 Pipfile.lock
 seed.sh
-csdb.sqlite3
+db.sqlite3
