@@ -36,6 +36,18 @@ class MyStories(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
+    def retrieve(self, request, pk=None):
+        """Handle GET requests for single post
+        Returns:
+            Response -- JSON serialized game instance
+        """
+        try:
+            story = Story.objects.get(user=request.auth.user,pk=pk)
+            serializer = StorySerializer(story, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
 class StorySerializer(serializers.ModelSerializer):
     """JSON serializer for stories
     Arguments:
