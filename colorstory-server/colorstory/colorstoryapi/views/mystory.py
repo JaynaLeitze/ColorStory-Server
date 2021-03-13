@@ -47,6 +47,25 @@ class MyStories(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
+    
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a story
+        
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            story = Story.objects.get(user=request.auth.user,pk=pk)
+            story.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Story.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class StorySerializer(serializers.ModelSerializer):
     """JSON serializer for stories
