@@ -34,6 +34,18 @@ class Comments(ViewSet):
             return Response(serializer.data)
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def retrieve(self, request, pk=None):
+        """Handle GET requests for single comment
+        Returns:
+            Response -- JSON serialized comment instance
+        """
+        try:
+            comment = Comment.objects.get(pk=pk)
+            serializer = CommentSerializer(comment, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
 class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments"""
