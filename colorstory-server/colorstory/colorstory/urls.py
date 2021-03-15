@@ -20,10 +20,12 @@ from rest_framework import routers
 from colorstoryapi.views import register_user, login_user
 from colorstoryapi.views import Stories
 from colorstoryapi.views import MyStories
+from colorstoryapi.views import Comments
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'stories', Stories, 'story')
 router.register(r"mystories", MyStories, 'mystory')
+router.register(r"comments", Comments, 'comment')
 
 urlpatterns = [
     path('', include(router.urls)),
