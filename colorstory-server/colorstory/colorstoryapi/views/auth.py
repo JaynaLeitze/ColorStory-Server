@@ -58,8 +58,6 @@ def register_user(request):
 
     # Now save the extra info in the rareapi table
     user = User.objects.create(
-        bio=req_body['bio'],
-        profile_image_url=req_body['profile_image_url'],
         created_on=datetime.datetime.now(),
         active=req_body['active'],
         user=new_user

@@ -18,15 +18,15 @@ class MyStories(ViewSet):
         Returns:
             Response -- JSON serialized event instance
         """
-        user = User.objects.get(user=request.auth.user)
+        # user = User.objects.get(user=request.auth.user)
         story = Story()
-        story.user = user
-        story.title = request.data["title"]
-        story.created_on = datetime.datetime.now()
-        story.content = request.data["content"]
+        story.user = request.auth.user
         story.color = request.data["color"]
         story.word_prompt = request.data["word_prompt"]
         story.private = request.data["private"]
+        story.content = request.data["content"]
+        story.title = request.data["title"]
+        story.created_on = datetime.date.today()
 
 
         try:
@@ -85,3 +85,4 @@ class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
         fields = ('id', 'user', 'color', 'word_prompt', 'private', 'title', 'created_on', 'content')
+        depth = 1
