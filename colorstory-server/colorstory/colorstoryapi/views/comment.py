@@ -46,6 +46,62 @@ class Comments(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
+    
+    def update(self, request, pk=None):
+        """Handle PUT requests for a comment
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+
+        story = Story.objects.get(pk=request.data["story_id"])
+
+        comment = Comment.objects.get(pk=pk)
+        comment.story= story
+        comment.author= request.auth.user
+        comment.content = request.data["content"]
+        comment.created_on = datetime.datetime.now()
+
+        comment.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a single comment
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            comment = Comment.objects.get(pk=pk)
+            comment.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Comment.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def list(self, request):
+        """Handle GET requests to comment resource
+        Returns:
+            Response -- JSON serialized list of comments
+        """
+        # Get all commentsfrom the database
+        comments = Comment.objects.all()
+
+        # Support filtering comments by type
+        #    http://localhost:8000/comments?post_id=1
+        #
+        # That URL will retrieve all a post's comments
+        post = self.request.query_params.get('post_id', None)
+        if post is not None:
+            comments = comments.filter(post__id=post)
+
+        serializer = CommentSerializer(
+            comments, many=True, context={'request': request})
+        return Response(serializer.data)
+
 
 class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments"""
