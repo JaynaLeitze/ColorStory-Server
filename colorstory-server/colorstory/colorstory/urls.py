@@ -19,9 +19,11 @@ from django.urls import path
 from rest_framework import routers
 from colorstoryapi.views import register_user, login_user
 from colorstoryapi.views import Stories
+from colorstoryapi.views import MyStories
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'stories', Stories, 'story')
+router.register(r"mystories", MyStories, 'mystory')
 
 urlpatterns = [
     path('', include(router.urls)),
