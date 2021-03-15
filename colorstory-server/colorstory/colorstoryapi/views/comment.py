@@ -91,12 +91,11 @@ class Comments(ViewSet):
         comments = Comment.objects.all()
 
         # Support filtering comments by type
-        #    http://localhost:8000/comments?post_id=1
-        #
-        # That URL will retrieve all a post's comments
-        post = self.request.query_params.get('post_id', None)
-        if post is not None:
-            comments = comments.filter(post__id=post)
+        #    http://localhost:8000/comments?story_id=1
+        # That URL will retrieve all a story's comments
+        story = self.request.query_params.get('story_id', None)
+        if story is not None:
+            comments = comments.filter(story__id=story)
 
         serializer = CommentSerializer(
             comments, many=True, context={'request': request})
