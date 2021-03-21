@@ -21,7 +21,7 @@ class Comments(ViewSet):
 
 
         story = Story.objects.get(pk=request.data["story_id"])
-
+        print(request.data)
         comment = Comment()
         comment.story = story
         comment.author= request.auth.user
@@ -88,24 +88,31 @@ class Comments(ViewSet):
             Response -- JSON serialized list of comments
         """
         # Get all commentsfrom the database
-        comments = Comment.objects.all()
 
-        # Support filtering comments by type
-        #    http://localhost:8000/comments?story_id=1
-        # That URL will retrieve all a story's comments
-        story = self.request.query_params.get('story_id', None)
-        if story is not None:
-            comments = comments.filter(story__id=story)
+        comments = Comment.objects.all()  
+        try:  
+           
+            for c in comments:
+                if c.author == request.auth.user:
+                    c.is_current_user = True
+                else:
+                    c.is_current_user = False
+                
+            serializer = CommentSerializer(comments, many=True, context={'request': request})
+            story = self.request.query_params.get('story_id', None)
 
-        serializer = CommentSerializer(
-            comments, many=True, context={'request': request})
-        return Response(serializer.data)
+            if story is not None:
+                comments = comments.filter(story__id=story)
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
 
 
 class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments"""
     class Meta:
         model = Comment
-        fields = ('id', 'story', 'author', 'content', 'created_on')
+        fields = ('id', 'story', 'author', 'content', 'created_on','is_current_user')
         depth = 2
 
