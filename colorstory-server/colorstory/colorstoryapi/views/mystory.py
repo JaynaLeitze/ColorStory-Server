@@ -43,7 +43,13 @@ class MyStories(ViewSet):
         """
         try:
             story = Story.objects.get(user=request.auth.user,pk=pk)
+
+            # if story.user_id == User.id:
+            #     story.is_current_user = True
+            # else:
+                # story.is_current_user = False
             serializer = StorySerializer(story, context={'request': request})
+
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -85,5 +91,5 @@ class StorySerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Story
-        fields = ('id', 'user', 'color', 'word_prompt', 'private', 'title', 'created_on', 'content')
-        depth = 1
+        fields = ('id', 'user', 'color', 'word_prompt', 'private', 'title', 'created_on', 'content', 'is_current_user')
+        depth = 2
