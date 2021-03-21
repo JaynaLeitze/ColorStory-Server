@@ -9,3 +9,7 @@ class Story(models.Model):
     content = models.TextField(max_length=2000)
     title = models.CharField(max_length=30)
     created_on = models.DateField(auto_now=False, auto_now_add=False)
+
+    @property
+    def is_current_user(self):
+        return self.__is_current_user

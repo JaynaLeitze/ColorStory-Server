@@ -29,6 +29,7 @@ class Stories(ViewSet):
         """
         try:
             story = Story.objects.get(pk=pk,private=False)
+            
             serializer = StorySerializer(story, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
@@ -42,4 +43,5 @@ class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
         fields = ('id', 'user', 'color', 'word_prompt', 'private', 'title', 'created_on', 'content')
+        depth = 2
       

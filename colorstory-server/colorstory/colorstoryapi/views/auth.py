@@ -56,15 +56,9 @@ def register_user(request):
         last_name=req_body['last_name']
     )
 
-    # Now save the extra info in the rareapi table
-    user = User.objects.create(
-        created_on=datetime.datetime.now(),
-        active=req_body['active'],
-        user=new_user
-    )
 
     # Commit the user to the database by saving it
-    user.save()
+    new_user.save()
 
     # Use the REST Framework's token generator on the new user account
     token = Token.objects.create(user=new_user)
