@@ -35,6 +35,21 @@ class MyStories(ViewSet):
             return Response(serializer.data)
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def update(self, request, pk=None):
+
+        story = Story.objects.get(pk=pk)
+
+        story.user = request.auth.user
+        story.color = request.data["color"]
+        story.word_prompt = request.data["word_prompt"]
+        story.private = request.data["private"]
+        story.content = request.data["content"]
+        story.title = request.data["title"]
+
+        story.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk=None):
         """Handle GET requests for single post

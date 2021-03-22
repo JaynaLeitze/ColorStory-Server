@@ -90,6 +90,9 @@ class Comments(ViewSet):
         # Get all commentsfrom the database
 
         comments = Comment.objects.all()  
+        story = self.request.query_params.get('story_id', None)
+        if story is not None:
+                comments = comments.filter(story__id=story)
         try:  
            
             for c in comments:
@@ -99,10 +102,9 @@ class Comments(ViewSet):
                     c.is_current_user = False
                 
             serializer = CommentSerializer(comments, many=True, context={'request': request})
-            story = self.request.query_params.get('story_id', None)
+            
 
-            if story is not None:
-                comments = comments.filter(story__id=story)
+            
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
